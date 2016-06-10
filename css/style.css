@@ -5,7 +5,7 @@
 }
 header {
 	position: fixed;
-	height: 8%;
+	height: 2.5rem;
 	width: 100%;
 	background-color: black;
 	left: 0;
@@ -13,8 +13,9 @@ header {
 }
 nav {
 	z-index: 9999;
-	line-height: 1.5rem;
-	margin: auto;
+	line-height: 2.5rem;
+	text-align: right;
+	padding-right: 1rem;
 }
 header ul {
 	list-style-type: none;
@@ -69,4 +70,14 @@ header a {
 .bott-right {
 	border-bottom-style: none;
 	border-right-style: none;
+}
+svg {
+	stroke: #808080;
+}
+.circle {
+	stroke-width: 10;
+	fill: transparent;
+}
+.cross {
+	stroke-width: 20;
 }
