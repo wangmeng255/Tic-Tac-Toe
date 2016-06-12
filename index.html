@@ -9,24 +9,40 @@
 	<header>
 		<nav>
 			<ul>
-				<li><a href="#0">New Board</a></li>
+				<li><a class="new-board" href="#0">New Board</a></li>
+				<li><a class="re-board" href="#0">Remove Board</a></li>
 			</ul>
 		</nav>
 	</header>
 	<section class="TTT">
-		<div class="board">
-			<div class="block top-left"><svg class="circle"><circle cx="37.5" cy="37.5" r="30" /></svg></div>
+		<div class="board addBoard0">
+			<div class="block top-left"></div>
 			<div class="block top"></div>
 			<div class="block top-right"></div>
 			<div class="block left"></div>
-			<div class="block center"><svg class="cross">
-  <line x1="15" y1="15" x2="60" y2="60" /><line x1="15" y1="60" x2="60" y2="15" />
-</svg></div>
+			<div class="block center"></div>
 			<div class="block right"></div>
 			<div class="block bott-left"></div>
 			<div class="block bott"></div>
 			<div class="block bott-right"></div>
 		</div>
 	</section>
+	<section class="hidden-sec">
+		<div class="hidden board">
+			<div class="block top-left"></div>
+			<div class="block top"></div>
+			<div class="block top-right"></div>
+			<div class="block left"></div>
+			<div class="block center"></div>
+			<div class="block right"></div>
+			<div class="block bott-left"></div>
+			<div class="block bott"></div>
+			<div class="block bott-right"></div>
+		</div>
+		<svg class="hidden-circle circle"><circle cx="36" cy="36" r="28" /></svg>
+		<svg class="hidden-cross cross"><line x1="12" y1="12" x2="60" y2="60" /><line x1="12" y1="60" x2="60" y2="12" /></svg>
+	</section>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>
