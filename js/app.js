@@ -1,6 +1,6 @@
 "use strict"
 $(function() {
-	var boardCount = 0;
+	var gameCount = 0;
 	var game = {
 		steps: 0,
 		board: [0,0,0,0,0,0,0,0,0]
@@ -19,42 +19,51 @@ $(function() {
 			   [0,4,2,5,6,7]];
 
 	$(".new-board").click(function() {
-		var newBoard = $(".hidden").clone();
-		newBoard.toggleClass("hidden");
-		boardCount += 1;
-		newBoard.toggleClass("addBoard" + boardCount);
-		$(".TTT").append(newBoard);
+		var newGame = $(".hidden").clone();
+		newGame.toggleClass("hidden");
+		gameCount += 1;
+		newGame.toggleClass("addGame" + gameCount);
+		newGame.find(".board").addClass("addBoard" + gameCount);
+		newGame.find(".result").addClass("invisible");
+		$(".TTT").append(newGame);
 		games.push($.extend(true, {}, game));
 	});
 	$(".re-board").click(function() {
-		var reBoard = $(".addBoard" + boardCount).remove();
-		boardCount -= 1;
-		games.pop();
+		if(gameCount) {
+			var reGame = $(".addGame" + gameCount).remove();
+			gameCount -= 1;
+			games.pop();
+		}
 	});
 	$(".TTT").on("click", ".block", function() {
 		$(this).css("pointer-events", "none");
 		var className = $(this).parent().attr("class").split(" ");
 		var classNum = className[1].match(/\d$/);
-		var gameCount = parseInt(classNum.toString());
+		var boardCount = parseInt(classNum.toString());
 		var blockIndex = $(this).parent().find(".block").index($(this));
-		if(games[gameCount].steps & 1) {
+		if(games[boardCount].steps & 1) {
 			var cloneCross = $(".hidden-cross").clone();
 			cloneCross.attr("class", "cross");
 			cloneCross.appendTo($(this));
-			games[gameCount].board[blockIndex] = -1;
+			games[boardCount].board[blockIndex] = -1;
 		}
 		else {
 			var cloneCircle = $(".hidden-circle").clone();
 			cloneCircle.attr("class", "circle");
 			cloneCircle.appendTo($(this));
-			games[gameCount].board[blockIndex] = 1;
+			games[boardCount].board[blockIndex] = 1;
 		}
-		var win = isWin(games[gameCount], blockIndex, $(this).parent());
+		var win = isWin(games[boardCount], blockIndex, $(this).parent());
 
 		if(!win) {
-			games[gameCount].steps += 1;
-			if(games[gameCount].steps===9) restart(game, $(this).parent());
+			games[boardCount].steps += 1;
 		}
+	})
+	.on("click", ".result input", function() {
+		var className = $(this).closest(".game").attr("class").split(" ");
+		var classNum = className[1].match(/\d$/);
+		var boardCount = parseInt(classNum.toString());
+		restart(games[boardCount], $(this).closest(".game").find(".board"));
 	});
 	var isWin = function (game, blockIndex, boardSelector) {
 		for(var i=0; i<winArr[blockIndex].length; i+=2)
@@ -63,13 +72,11 @@ $(function() {
 					  game.board[winArr[blockIndex][i]] +
 					  game.board[winArr[blockIndex][i+1]];
 			if(sum===-3) {
-				alert("x win"); 
-				restart(game, boardSelector); 
+				boardSelector.next().find("h2").text("X wins!");
 				return true;
 			}
 			if(sum===3) {
-				alert("o win"); 
-				restart(game, boardSelector); 
+				boardSelector.next().find("h2").text("O wins!");
 				return true;
 			}
 		}
@@ -77,10 +84,11 @@ $(function() {
 	};
 	function restart(game, board) {
 		game.steps = 0;
-		jQuery.each(game.board, function(i, val) {
+		//game.board = [0,0,0,0,0,0,0,0,0]; this works!!
+		$.each(game.board, function(i, val) {//this doesn't work
 			val = 0;
 		});
 		console.log(game);
-		board.html($(".hidden").children().clone());
+		board.html($(".hidden").find(".board").children().clone());
 	}
 });
