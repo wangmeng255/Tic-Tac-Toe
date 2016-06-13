@@ -89,6 +89,7 @@ $(function() {
 			val = 0;
 		});
 		console.log(game);
+		board.next().find("h2").html("&nbsp;");
 		board.html($(".hidden").find(".board").children().clone());
 	}
 });
