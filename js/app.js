@@ -37,37 +37,13 @@ $(function() {
 	});
 	$(".TTT").on("click", ".block", function() {
 		$(this).css("pointer-events", "none");
-		var className = $(this).closest(".board").attr("class").split(" ");
-		var classNum = className[1].match(/\d$/);
-		var boardCount = parseInt(classNum.toString());
-		var blockIndex = $(this).closest(".board").find(".block").index($(this));
-		if(games[boardCount].steps & 1) {
-			var cloneCross = $(".hidden-cross").clone();
-			cloneCross.attr("class", "cross");
-			cloneCross.appendTo($(this).children("div"));
-			games[boardCount].board[blockIndex] = -1;
-		}
-		else {
-			var cloneCircle = $(".hidden-circle").clone();
-			cloneCircle.attr("class", "circle");
-			cloneCircle.appendTo($(this).children("div"));
-			games[boardCount].board[blockIndex] = 1;
-		}
-		var win = isWin(games[boardCount], blockIndex, $(this).closest(".board"));
-
-		if(!win) {
-			games[boardCount].steps += 1;
-		}
-		else {
-			$(this).closest(".board").addClass("finish");
-			$(this).closest(".board").find("input").each(function() {
-				$(this).prop("disabled", "true");
-			});
-		}
+		oneStep($(this), $(this));
 	})
 	.on("change", ".board input", function() {
 		this.setAttribute('disabled','');
-		console.log('change');
+		oneStep($(this), $(this).parent(".block"));
+		$(this).closest(".board").children("input").focus();
+		console.log("change");
 	})
 	.on("click", ".result input", function() {
 		var className = $(this).closest(".game").attr("class").split(" ");
@@ -92,6 +68,35 @@ $(function() {
 		}
 		return false;
 	};
+	function oneStep(eventTarget, eventBlock) {
+		var className = eventTarget.closest(".board").attr("class").split(" ");
+		var classNum = className[1].match(/\d$/);
+		var boardCount = parseInt(classNum.toString());
+		var blockIndex = eventTarget.closest(".board").find(".block").index(eventBlock);
+		if(games[boardCount].steps & 1) {
+			var cloneCross = $(".hidden-cross").clone();
+			cloneCross.attr("class", "cross");
+			cloneCross.appendTo(eventTarget.children("div"));
+			games[boardCount].board[blockIndex] = -1;
+		}
+		else {
+			var cloneCircle = $(".hidden-circle").clone();
+			cloneCircle.attr("class", "circle");
+			cloneCircle.appendTo(eventTarget.children("div"));
+			games[boardCount].board[blockIndex] = 1;
+		}
+		var win = isWin(games[boardCount], blockIndex, eventTarget.closest(".board"));
+
+		if(!win) {
+			games[boardCount].steps += 1;
+		}
+		else {
+			eventTarget.closest(".board").addClass("finish");
+			eventTarget.closest(".board").find("input").each(function() {
+				if(!eventTarget.prop("disabled")) eventTarget.prop("disabled", "true");
+			});
+		}
+	}
 	function restart(game, board) {
 		game.steps = 0;
 		//game.board = [0,0,0,0,0,0,0,0,0]; //this works!!
