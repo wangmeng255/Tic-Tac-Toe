@@ -36,14 +36,11 @@ $(function() {
 		}
 	});
 	$(".TTT").on("click", ".block", function() {
-		$(this).css("pointer-events", "none");
 		oneStep($(this), $(this));
 	})
 	.on("change", ".board input", function() {
-		this.setAttribute('disabled','');
 		oneStep($(this), $(this).parent(".block"));
-		$(this).closest(".board").children("input").focus();
-		console.log("change");
+		$(this).closest(".game").children("input").focus();
 	})
 	.on("click", ".result input", function() {
 		var className = $(this).closest(".game").attr("class").split(" ");
@@ -69,6 +66,8 @@ $(function() {
 		return false;
 	};
 	function oneStep(eventTarget, eventBlock) {
+		eventTarget.find("input").prop("disabled", true);
+		eventTarget.css("pointer-events", "none");
 		var className = eventTarget.closest(".board").attr("class").split(" ");
 		var classNum = className[1].match(/\d$/);
 		var boardCount = parseInt(classNum.toString());
@@ -85,6 +84,7 @@ $(function() {
 			cloneCircle.appendTo(eventTarget.children("div"));
 			games[boardCount].board[blockIndex] = 1;
 		}
+		console.log(games[boardCount]);
 		var win = isWin(games[boardCount], blockIndex, eventTarget.closest(".board"));
 
 		if(!win) {
@@ -93,7 +93,7 @@ $(function() {
 		else {
 			eventTarget.closest(".board").addClass("finish");
 			eventTarget.closest(".board").find("input").each(function() {
-				if(!eventTarget.prop("disabled")) eventTarget.prop("disabled", "true");
+				if(!eventTarget.find("input").prop("disabled")) eventTarget.prop("disabled", "true");
 			});
 		}
 	}
