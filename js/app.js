@@ -84,10 +84,10 @@ $(function() {
 	};
 	function restart(game, board) {
 		game.steps = 0;
-		//game.board = [0,0,0,0,0,0,0,0,0]; this works!!
-		$.each(game.board, function(i, val) {//this doesn't work
+		game.board = [0,0,0,0,0,0,0,0,0]; //this works!!
+		/*$.each(game.board, function(i, val) {//this doesn't work
 			val = 0;
-		});
+		});*/
 		console.log(game);
 		board.next().find("h2").html("&nbsp;");
 		board.html($(".hidden").find(".board").children().clone());
