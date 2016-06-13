@@ -7,7 +7,7 @@ header {
 	position: fixed;
 	height: 2.5rem;
 	width: 100%;
-	background-color: black;
+    background-color: #333333;
 	left: 0;
 	top: 0;
 }
@@ -45,12 +45,34 @@ header a {
 	flex-direction: row;
 	flex-wrap: wrap;
 }
+input[type="checkbox"] {
+	margin: 0;
+	padding: 0;
+	background-color: transparent;
+	-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.game input[type="checkbox"]:focus ~ .board,
+.block input[type="checkbox"]:focus ~ div {
+	box-shadow: 0 0 5px #51cbee;
+	outline: 1px solid #51cbee;
+}
 .board {
 	width: 15rem;
 	height: 15rem;
-	display: flex;
-	flex-wrap: wrap;
 	margin: 0.5rem;
+	border-collapse: collapse;
+}
+.board:after {
+
 }
 .result {
 	text-align: center;
@@ -78,9 +100,13 @@ header a {
 	display: none;
 }
 .block {
-	width: 5rem;
-	height: 5rem;
-	border: 0.25rem solid black;
+	border: 0.5rem solid black;
+	position: relative;
+}
+.block div {
+	margin-top: -1.2rem;
+	width: 4.65rem;
+	height: 4.65rem;
 }
 .top-left {
 	border-left-style: none;
@@ -112,8 +138,8 @@ header a {
 }
 svg {
 	stroke: #a6a6a6;
-	width: 72px;
-	height: 72px;
+	width: 74px;
+	height: 74px;
 }
 .circle {
 	stroke-width: 10;

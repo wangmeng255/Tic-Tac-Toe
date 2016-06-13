@@ -37,23 +37,23 @@ $(function() {
 	});
 	$(".TTT").on("click", ".block", function() {
 		$(this).css("pointer-events", "none");
-		var className = $(this).parent().attr("class").split(" ");
+		var className = $(this).closest(".board").attr("class").split(" ");
 		var classNum = className[1].match(/\d$/);
 		var boardCount = parseInt(classNum.toString());
-		var blockIndex = $(this).parent().find(".block").index($(this));
+		var blockIndex = $(this).closest(".board").find(".block").index($(this));
 		if(games[boardCount].steps & 1) {
 			var cloneCross = $(".hidden-cross").clone();
 			cloneCross.attr("class", "cross");
-			cloneCross.appendTo($(this));
+			cloneCross.appendTo($(this).children("div"));
 			games[boardCount].board[blockIndex] = -1;
 		}
 		else {
 			var cloneCircle = $(".hidden-circle").clone();
 			cloneCircle.attr("class", "circle");
-			cloneCircle.appendTo($(this));
+			cloneCircle.appendTo($(this).children("div"));
 			games[boardCount].board[blockIndex] = 1;
 		}
-		var win = isWin(games[boardCount], blockIndex, $(this).parent());
+		var win = isWin(games[boardCount], blockIndex, $(this).closest(".board"));
 
 		if(!win) {
 			games[boardCount].steps += 1;
@@ -71,12 +71,12 @@ $(function() {
 			var sum = game.board[blockIndex] + 
 					  game.board[winArr[blockIndex][i]] +
 					  game.board[winArr[blockIndex][i+1]];
-			if(sum===-3) {
-				boardSelector.next().find("h2").text("X wins!");
-				return true;
-			}
-			if(sum===3) {
-				boardSelector.next().find("h2").text("O wins!");
+			if(sum===-3 || sum===3) {
+				if(sum===-3) boardSelector.next().find("h2").text("X wins!");
+				if(sum===3) boardSelector.next().find("h2").text("O wins!");
+				$(boardSelector.find(".block").get(blockIndex)).css("background-color", "#FF6600");
+				$(boardSelector.find(".block").get(winArr[blockIndex][i])).css("background-color", "#FF6600");
+				$(boardSelector.find(".block").get(winArr[blockIndex][i+1])).css("background-color", "#FF6600");
 				return true;
 			}
 		}
@@ -84,11 +84,11 @@ $(function() {
 	};
 	function restart(game, board) {
 		game.steps = 0;
-		game.board = [0,0,0,0,0,0,0,0,0]; //this works!!
-		/*$.each(game.board, function(i, val) {//this doesn't work
-			val = 0;
-		});*/
-		console.log(game);
+		//game.board = [0,0,0,0,0,0,0,0,0]; //this works!!
+		$.each(game.board, function(i, val) {//this doesn't work
+			game.board[i] = 0;
+		});
+		//console.log(game);
 		board.next().find("h2").html("&nbsp;");
 		board.html($(".hidden").find(".board").children().clone());
 	}
