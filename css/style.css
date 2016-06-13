@@ -58,12 +58,12 @@ input[type="checkbox"] {
     right: 0;
     bottom: 0;
     opacity: 0;
-    cursor: pointer;
 }
 .game input[type="checkbox"]:focus ~ .board,
-.block input[type="checkbox"]:focus ~ div {
+.block input[type="checkbox"]:focus ~ div,
+.game input[type="button"]:focus {
 	box-shadow: 0 0 5px #51cbee;
-	outline: 1px solid #51cbee;
+	outline: 3px solid #51cbee;
 }
 .board {
 	width: 15rem;
@@ -71,8 +71,8 @@ input[type="checkbox"] {
 	margin: 0.5rem;
 	border-collapse: collapse;
 }
-.board:after {
-
+.finish {
+	pointer-events: none;
 }
 .result {
 	text-align: center;
@@ -101,6 +101,7 @@ input[type="checkbox"] {
 }
 .block {
 	border: 0.5rem solid black;
+	cursor: pointer;
 	position: relative;
 }
 .block div {

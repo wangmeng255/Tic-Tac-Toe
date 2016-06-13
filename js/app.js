@@ -58,6 +58,16 @@ $(function() {
 		if(!win) {
 			games[boardCount].steps += 1;
 		}
+		else {
+			$(this).closest(".board").addClass("finish");
+			$(this).closest(".board").find("input").each(function() {
+				$(this).prop("disabled", "true");
+			});
+		}
+	})
+	.on("change", ".board input", function() {
+		this.setAttribute('disabled','');
+		console.log('change');
 	})
 	.on("click", ".result input", function() {
 		var className = $(this).closest(".game").attr("class").split(" ");
@@ -91,5 +101,6 @@ $(function() {
 		//console.log(game);
 		board.next().find("h2").html("&nbsp;");
 		board.html($(".hidden").find(".board").children().clone());
+		board.removeClass("finish");
 	}
 });
