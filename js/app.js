@@ -35,10 +35,10 @@ $(function() {
 			games.pop();
 		}
 	});
-	$(".TTT").on("click", ".block", function() {
-		oneStep($(this), $(this));
+	$(".TTT").on("click", ".block div", function() {
+		oneStep($(this), $(this).parent(".block"));
 	})
-	.on("change", ".board input", function() {
+	.on("change", ".block input", function() {
 		oneStep($(this), $(this).parent(".block"));
 		$(this).closest(".game").children("input").focus();
 	})
@@ -66,25 +66,25 @@ $(function() {
 		return false;
 	};
 	function oneStep(eventTarget, eventBlock) {
-		eventTarget.find("input").prop("disabled", true);
-		eventTarget.css("pointer-events", "none");
-		var className = eventTarget.closest(".board").attr("class").split(" ");
+		eventBlock.find("input").prop("disabled", true);
+		eventBlock.css("pointer-events", "none");
+		var className = eventBlock.closest(".board").attr("class").split(" ");
 		var classNum = className[1].match(/\d$/);
 		var boardCount = parseInt(classNum.toString());
-		var blockIndex = eventTarget.closest(".board").find(".block").index(eventBlock);
+		var blockIndex = eventBlock.closest(".board").find(".block").index(eventBlock);
 		if(games[boardCount].steps & 1) {
 			var cloneCross = $(".hidden-cross").clone();
 			cloneCross.attr("class", "cross");
-			cloneCross.appendTo(eventTarget.children("div"));
+			cloneCross.appendTo(eventBlock.children("div"));
 			games[boardCount].board[blockIndex] = -1;
 		}
 		else {
 			var cloneCircle = $(".hidden-circle").clone();
 			cloneCircle.attr("class", "circle");
-			cloneCircle.appendTo(eventTarget.children("div"));
+			cloneCircle.appendTo(eventBlock.children("div"));
 			games[boardCount].board[blockIndex] = 1;
 		}
-		console.log(games[boardCount]);
+		//console.log(games[boardCount].steps);
 		var win = isWin(games[boardCount], blockIndex, eventTarget.closest(".board"));
 
 		if(!win) {
@@ -92,8 +92,8 @@ $(function() {
 		}
 		else {
 			eventTarget.closest(".board").addClass("finish");
-			eventTarget.closest(".board").find("input").each(function() {
-				if(!eventTarget.find("input").prop("disabled")) eventTarget.prop("disabled", "true");
+			eventBlock.closest(".board").find("input").each(function() {
+				if($(this).prop("disabled")===false) $(this).prop("disabled", "true");
 			});
 		}
 	}
