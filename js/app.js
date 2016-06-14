@@ -57,9 +57,10 @@ $(function() {
 			if(sum===-3 || sum===3) {
 				if(sum===-3) boardSelector.next().find("h2").text("X wins!");
 				if(sum===3) boardSelector.next().find("h2").text("O wins!");
-				$(boardSelector.find(".block").get(blockIndex)).css("background-color", "#FF6600");
-				$(boardSelector.find(".block").get(winArr[blockIndex][i])).css("background-color", "#FF6600");
-				$(boardSelector.find(".block").get(winArr[blockIndex][i+1])).css("background-color", "#FF6600");
+				var $block = boardSelector.find(".block");
+				$($block.get(blockIndex)).find("svg").css("stroke", "red");
+				$($block.get(winArr[blockIndex][i])).find("svg").css("stroke", "red");
+				$($block.get(winArr[blockIndex][i+1])).find("svg").css("stroke", "red");
 				return true;
 			}
 		}
@@ -84,7 +85,6 @@ $(function() {
 			cloneCircle.appendTo(eventBlock.children("div"));
 			games[boardCount].board[blockIndex] = 1;
 		}
-		//console.log(games[boardCount].steps);
 		var win = isWin(games[boardCount], blockIndex, eventTarget.closest(".board"));
 
 		if(!win) {
@@ -99,11 +99,9 @@ $(function() {
 	}
 	function restart(game, board) {
 		game.steps = 0;
-		//game.board = [0,0,0,0,0,0,0,0,0]; //this works!!
-		$.each(game.board, function(i, val) {//this doesn't work
+		$.each(game.board, function(i, val) {
 			game.board[i] = 0;
 		});
-		//console.log(game);
 		board.next().find("h2").html("&nbsp;");
 		board.html($(".hidden").find(".board").children().clone());
 		board.removeClass("finish");
