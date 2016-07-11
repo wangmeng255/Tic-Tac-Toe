@@ -27,31 +27,34 @@ $(function() {
 		$(".TTT").append(newGame);
 		games.push($.extend(true, {}, game));
 	});
-	$(".re-board").click(function() {
+	$(".rm-board").click(function() {
 		if(gameCount) {
 			var reGame = $(".addGame" + gameCount).remove();
 			gameCount -= 1;
 			games.pop();
 		}
 	});
-	$(".TTT").on("click", ".block div", function() {
-		oneStep($(this), $(this).parent(".block"));
-	})
-	.on("change", ".block input", function() {
-		oneStep($(this), $(this).parent(".block"));
+	$(".TTT").on("change", ".block input", function() {
+		var boardCount = getBoardCount($(this));
+		oneStep(boardCount, $(this), $(this).parent(".block"));
 		$(this).closest(".game").children("input").focus();
 	})
 	.on("click", ".result input", function() {
-		var className = $(this).closest(".game").attr("class").split(" ");
-		var classNum = className[1].match(/\d$/);
-		var boardCount = parseInt(classNum.toString());
+		var boardCount = getBoardCount($(this));
 		restart(games[boardCount], $(this).closest(".game").find(".board"));
+		$(this).closest(".game").children("input").focus();
 	});
 });
 
+function getBoardCount(block) {
+	var className = block.closest(".game").attr("class").split(" ");
+	var classNum = className[1].match(/\d$/);
+	var boardCount = parseInt(classNum.toString());
+	return boardCount;
+}
+
 var isWin = function (game, blockIndex, boardSelector) {
-	for(var i=0; i<winArr[blockIndex].length; i+=2)
-	{
+	for(var i=0; i<winArr[blockIndex].length; i+=2) {
 		var sum = game.board[blockIndex] + 
 				  game.board[winArr[blockIndex][i]] +
 				  game.board[winArr[blockIndex][i+1]];
@@ -67,12 +70,10 @@ var isWin = function (game, blockIndex, boardSelector) {
 	}
 	return false;
 };
-function oneStep(eventTarget, eventBlock) {
+
+function oneStep(boardCount, eventTarget, eventBlock) {
 	eventBlock.find("input").prop("disabled", true);
 	eventBlock.css("pointer-events", "none");
-	var className = eventBlock.closest(".board").attr("class").split(" ");
-	var classNum = className[1].match(/\d$/);
-	var boardCount = parseInt(classNum.toString());
 	var blockIndex = eventBlock.closest(".board").find(".block").index(eventBlock);
 	if(games[boardCount].steps & 1) {
 		var cloneCross = $(".hidden-cross").clone();
@@ -91,12 +92,14 @@ function oneStep(eventTarget, eventBlock) {
 		games[boardCount].steps += 1;
 	}
 	else {
-		eventTarget.closest(".board").addClass("finish");
-		eventBlock.closest(".board").find("input").each(function() {
+		var closestBoard = eventTarget.closest(".board");
+		closestBoard.addClass("finish");
+		closestBoard.find("input").each(function() {
 			if($(this).prop("disabled")===false) $(this).prop("disabled", "true");
 		});
 	}
 }
+
 function restart(game, board) {
 	game.steps = 0;
 	$.each(game.board, function(i, val) {
