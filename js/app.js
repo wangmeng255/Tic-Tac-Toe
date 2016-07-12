@@ -37,12 +37,10 @@ $(function() {
 	$(".TTT").on("change", ".block input", function() {
 		var boardCount = getBoardCount($(this));
 		oneStep(boardCount, $(this), $(this).parent(".block"));
-		$(this).closest(".game").children("input").focus();
 	})
 	.on("click", ".result input", function() {
 		var boardCount = getBoardCount($(this));
 		restart(games[boardCount], $(this).closest(".game").find(".board"));
-		$(this).closest(".game").children("input").focus();
 	});
 });
 
